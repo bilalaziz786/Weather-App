@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Weather App</title>
+  </head>
+  <body>
+    <h1>Weather App</h1>
+    <p id="demo">Enter Zip Code <input type="text" id="code" name="code"></p>
+    <button id="gettemp" type="button" onclick="loadDoc()">Get temperature</button>
+
+    <script>
+    function loadDoc() {
+      var xhttp = new XMLHttpRequest();
+      var x=document.getElementById("code").value;
+        xhttp.onreadystatechange = function() {
+        	// if statement to check whether we got the response or not. If Weather API responds then it will go into if block otherwise not.
+    if (this.readyState == 4 && this.status == 200) {
+      var str = this.responseText;
+
+      // Converting the string into JSON format
+      var obj = JSON.parse(str);
+
+      // Temperature of the city is to be written in place of the paragraph with id="demo"
+      document.getElementById("demo").innerHTML= "The temperature of " + obj["name"] + " in kelvin is: " + obj["main"]["temp"];
+
+      //Making the button invisible after click
+      document.getElementById("gettemp").style.display="none";
+    }
+  };
+      xhttp.open("GET", "http://api.openweathermap.org/data/2.5/weather?zip="+ x + ",in&appid=172a15a75ae6f45a8a7bea6adc47fe3a", true);
+      xhttp.send();
+
+    }
+    </script>
+  </body>
+</html>
+
+<!-- To execute a synchronous request, change the third parameter in the open() method to false:
+xhttp.open("GET", "ajax_info.txt", false);
+Sometimes async = false are used for quick testing. You will also find synchronous requests in older JavaScript code.
+
+Since the code will wait for server completion, there is no need for an onreadystatechange function: -->
